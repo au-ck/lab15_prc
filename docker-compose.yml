@@ -12,7 +12,6 @@ services:
       - mysql-data:/var/lib/mysql   # volume added here
 
   backend:
-    image: mnck/oven-backend:latest
     container_name: springboot
     build:
       context: ./OVENAPI-SPRINGBOOT
@@ -24,7 +23,6 @@ services:
     restart: on-failure
 
   frontend:
-    image: mnck/oven-frontend:latest
     container_name: react
     build:
       context: ./OVENAPI-REACT
