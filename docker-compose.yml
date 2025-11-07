@@ -1,18 +1,18 @@
 services:
   mysqldb:
-    image: mysql:8
     container_name: mysql-db
+    image: mysql:8
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: ovendb
+      MYSQL_DATABASE: lab15
+    
     ports:
       - "3307:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
-    networks:
-      - springboot-mysql-net
+      - mysql-data:/var/lib/mysql   # volume added here
 
   backend:
+    image: mnck/oven-backend:latest
     container_name: springboot
     build:
       context: ./OVENAPI-SPRINGBOOT
@@ -22,24 +22,18 @@ services:
     depends_on:
       - mysqldb
     restart: on-failure
-    networks:
-      - springboot-mysql-net
 
   frontend:
+    image: mnck/oven-frontend:latest
     container_name: react
     build:
       context: ./OVENAPI-REACT
       dockerfile: frontend.Dockerfile
     ports:
-      - "3000:80"
+      - "3001:80"
     depends_on:
       - backend
-    restart: on-failure
-    networks:
-      - springboot-mysql-net
 
+# Declare volumes at the bottom
 volumes:
-  mysql_data:
-
-networks:
-  springboot-mysql-net:
+  mysql-data:
